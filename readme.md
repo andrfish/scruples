@@ -88,34 +88,28 @@ Setup
 -----
 This project requires Python 3.7, and was tested with Python 3.7.6
 specifically. To setup the project:
-
-  1. Make sure you have the MySQL client (on ubuntu):
-
-         sudo apt-get install libmysqlclient-dev
-
-  2. Upgrade pip:
-
-         pip install --upgrade pip
-
-  3. Install [PyTorch][pytorch] using the directions on their site.
-  4. Install the package requirements:
-
-         pip install -r requirements.txt
-
-  5. Install this repository:
-
-         pip install --editable .
-
-  6. Download the english model for spacy:
-
-         python -m spacy download en
-
-  7. (optional) Run the tests to make sure that everything is
-     working. They'll take about 5 minutes to complete, or you can pass the
-     `--skip-slow` (`-s`) option to run a smaller, faster test suite:
-
-         pip install pytest
-         pytest
+    1. Install Ubuntu 18.04.5 LTS from the Microsoft Store (some of the oldest code in this repo is from 2019 so they likely used this version in development)
+    2. Once you've set it up, do all updates and install the MySQL as well as C++ compilation packages with:
+        sudo apt update && sudo apt upgrade -y && sudo apt install libmysqlclient-dev build-essential manpages-dev -y
+    3. Download the Anaconda installer with:
+        cd /tmp && curl -O https://repo.anaconda.com/archive/Anaconda3-2022.10-Linux-x86_64.sh
+    4. Install Anaconda (make sure to get the installer to initialize it at the end when it prompts you) with:
+        bash Anaconda3-2022.10-Linux-x86_64.sh
+    5. Relaunch the shell by closing the window and re-opening it, then make a new environment with the version of Python the authors use with:
+        conda create -n scruples python=3.7.6
+    6. Activate the new environment, update pip, and install PyTorch (the repo will overwrite some of this installation but that's fine) as well as G++ compilation tools with:
+        conda activate scruples && pip install --upgrade pip && conda install pytorch torchvision torchaudio -c pytorch && conda install -c conda-forge gxx
+    7. Clone the GitHub repository and install it (the period at the end needs to be there, this will take a bit):
+        cd ~/ && git clone https://github.com/allenai/scruples.git && cd scruples && pip install --editable .
+    8. Install statsmodels (don't worry about any errors/warnings) and downgrade the versions of "transformers", "xgboost", as well as "scipy" (this will overwrite the statsmodels install but that's fine) that was automatically installed with:
+        pip install statsmodels transformers==2.1.1 xgboost==1.5.0 scipy==1.2.3
+    9. Download the "omw-1.4" dataset with the following sequence of commands (don't worry about any deprecation warnings):
+        python -i
+        import nltk
+        nltk.download('omw-1.4')
+        exit()
+    10. Install remaining requirements, download the english model for spacy, and install pytest:
+        sed --in-place '/regex/d' requirements.txt && pip install -r requirements.txt && python -m spacy download en && pip install pytest
 
 
 Quickstart
